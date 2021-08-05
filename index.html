@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>slides-embed</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="backdrop" v-if="!started">
+        <slide-button
+          v-if="showList"
+          v-for="slide in slides"
+          v-bind:slide="slide"
+          v-bind:key="slide.name"
+          v-on:click.native="start(slide)"
+        ></slide-button>
+
+        <span class="click-to-start" v-if="!showList" @click="start"
+          >Click to Start</span
+        >
+      </div>
+
+      <iframe
+        v-bind:src="src"
+        frameborder="0"
+        width="960"
+        height="569"
+        allowfullscreen="true"
+        mozallowfullscreen="true"
+        webkitallowfullscreen="true"
+        allow="autoplay *"
+        v-if="started"
+      ></iframe>
+    </div>
+
+    <script>
+      Vue.component("slide-button", {
+        props: ["slide"],
+        template:
+          '<button class="slide-button"><span>{{slide.name}} </span></button>',
+      });
+
+      const app = new Vue({
+        el: "#app",
+        data: {
+          started: false,
+          showList: true,
+          slides: [
+            {
+              name: "Dr. Reddy",
+              src: "https://docs.google.com/presentation/d/e/2PACX-1vQEyayG03lpI45TmyU2i6CHxcNdHEWAoIrm4pVHnmQ4rXBF5Q641ZQ73TNkRz0vYAafkqQNfUcb1smC/embed?start=true&loop=true&delayms=3000",
+            },
+            {
+              name: "Capgemini 5G",
+              src: "https://docs.google.com/presentation/d/e/2PACX-1vRcHP6inkrblzDraYN_qa59FXCbrJepi3wPpi05W2x73Rn72dVPxgoOz3FSjtsQHQU5HBmLdJHaSUGe/embed?start=true&loop=true&delayms=3000",
+            },
+            {
+              name: "Gyproc",
+              src: "https://docs.google.com/presentation/d/e/2PACX-1vTC92gJ5sKk7JvVURXc0kXMYGuVIzRSA89c16kUjrRx_aAR0Nb7ZZMnAR_Sisjo1L8CnnmI4mG3BWDz/embed?start=true&loop=true&delayms=3000",
+            },
+            {
+              name: "Hindware",
+              src: "https://docs.google.com/presentation/d/e/2PACX-1vTThrP04bRMn8gubKTaUv7ugadrmE_gnxblg1IAL5RZcWOxngJzA7DFrjERqZCGiFNH6WWabDdlRNzG/embed?start=true&loop=true&delayms=3000",
+            },
+            {
+              name: "Irasva",
+              src: "https://docs.google.com/presentation/d/e/2PACX-1vQ5fjjz0MLhTF5hdVN2-8HreQd99Oxk-0RCnn-quMa8dZI2hmBVlkNUQB3TzOqwu4qoV4WCMozxSvR8/embed?start=true&loop=true&delayms=3000",
+            },
+            {
+              name: "Krish-e",
+              src: "https://docs.google.com/presentation/d/e/2PACX-1vTiAI8ZQiH7PE9vlFFo248Bgr4DRpp9ZVgCWS7gDqHQ6QTbIiZLXGJnvlyJMM__E3U3WZLMxWWiUlx4/embed?start=true&loop=true&delayms=3000",
+            },
+            {
+              name: "Nickelodeon",
+              src: "https://docs.google.com/presentation/d/e/2PACX-1vQTCITQc2TY54DyoiaDNLFa748M4U5Ke4cMdCluExctR6shYCYA-f3-80eA7biE8cMgSnFDtHIseIdl/embed?start=true&loop=true&delayms=3000",
+            },
+            {
+              name: "Oral b",
+              src: "https://docs.google.com/presentation/d/e/2PACX-1vRscdP4dco8IXZglD_4Cq4rfbDUH6cuu9Z_gRMiKdJqKdVVGNU0SEps5ABHDLNSbp1Mi3f_fCS_a6Cr/embed?start=true&loop=true&delayms=3000",
+            },
+            {
+              name: "PRIDE",
+              src: "https://docs.google.com/presentation/d/e/2PACX-1vSo0vYJJwN9o07kQmiem5PQF2eOOC13ZUfgxxz_3ueyE31LKnaSLmLfEC2NqIEG07w0DWvzSN7tmNin/embed?start=true&loop=true&delayms=3000",
+            },
+            {
+              name: "Unmatched",
+              src: "https://docs.google.com/presentation/d/e/2PACX-1vQ9YXaLewmPN-mgn4zytt0fHrRFwx4XfTDvYfv7FeWXnKGm7PNdTWknPmogQN_neGVJJQPGc0C2ggBm/embed?start=true&loop=true&delayms=3000",
+            },
+          ],
+        },
+        created() {
+          this.showList = !window.location.hash;
+        },
+        methods: {
+          start(slide) {
+            if (this.showList) {
+              this.started = true;
+              this.src = slide.src;
+              window.location = "#" + slide.name;
+            } else {
+              const name = decodeURI(window.location.hash.substring(1));
+              const s = this.slides.find((s) => s.name == name);
+              if (s) {
+                this.started = true;
+                this.src = s.src;
+              } else {
+                alert("No such slide found!!");
+              }
+            }
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
